@@ -139,13 +139,13 @@ public class MuteCommand implements CommandExecutor{
 			try {
 				mutedList.load(file);
 			} catch (FileNotFoundException e) {
-				sender.sendMessage("Es ist ein Fehler aufgetreten!");
+				sender.sendMessage(defaultError);
 				e.printStackTrace();
 			} catch (IOException e) {
-				sender.sendMessage("Es ist ein Fehler aufgetreten!");
+				sender.sendMessage(defaultError);
 				e.printStackTrace();
 			} catch (InvalidConfigurationException e) {
-				sender.sendMessage("Es ist ein Fehler aufgetreten!");
+				sender.sendMessage(defaultError);
 				e.printStackTrace();
 			}
 			mutedList.set(muted.getUniqueId().toString(), "1");
