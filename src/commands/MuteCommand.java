@@ -15,7 +15,11 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
+import main.Main;
+
 public class MuteCommand implements CommandExecutor{
+	
+	public static String defaultError = "Es ist ein Fehler aufgetreten!";
 
 	@SuppressWarnings("deprecation")
 	@Override
@@ -56,7 +60,15 @@ public class MuteCommand implements CommandExecutor{
 	public static void mutePlayer(CommandSender sender, String[] args, Boolean unlimit, Player muted) {
 		
 		FileConfiguration mutedList = new YamlConfiguration();
+		FileConfiguration config = Main.getPlugin().getConfig();
 		File file = new File("plugins/ChatMute/mutes/muteList.yml");
+		
+		try {
+			defaultError = config.getString("Default.ErrorMessage");
+			
+		} catch (Exception e) {
+			
+		}
 		
 		if (unlimit == true) {
 			//Unlimited Mute
@@ -64,13 +76,13 @@ public class MuteCommand implements CommandExecutor{
 			try {
 				mutedList.load(file);
 			} catch (FileNotFoundException e) {
-				sender.sendMessage("Es ist ein Fehler aufgetreten!");
+				sender.sendMessage(defaultError);
 				e.printStackTrace();
 			} catch (IOException e) {
-				sender.sendMessage("Es ist ein Fehler aufgetreten!");
+				sender.sendMessage(defaultError);
 				e.printStackTrace();
 			} catch (InvalidConfigurationException e) {
-				sender.sendMessage("Es ist ein Fehler aufgetreten!");
+				sender.sendMessage(defaultError);
 				e.printStackTrace();
 			}
 			mutedList.set(muted.getUniqueId().toString(), "1");
@@ -84,18 +96,18 @@ public class MuteCommand implements CommandExecutor{
 			try {
 				mutedList.load(file);
 			} catch (FileNotFoundException e) {
-				sender.sendMessage("Es ist ein Fehler aufgetreten!");
+				sender.sendMessage(defaultError);
 				e.printStackTrace();
 			} catch (IOException e) {
-				sender.sendMessage("Es ist ein Fehler aufgetreten!");
+				sender.sendMessage(defaultError);
 				e.printStackTrace();
 			} catch (InvalidConfigurationException e) {
-				sender.sendMessage("Es ist ein Fehler aufgetreten!");
+				sender.sendMessage(defaultError);
 				e.printStackTrace();
 			}
 			
 			
-
+			//calculate mute time in hours
 			long muteTime = Integer.parseInt(args[1]);
 
 			
@@ -108,7 +120,7 @@ public class MuteCommand implements CommandExecutor{
 		try {
 			mutedList.save(file);
 		} catch (IOException e) {
-			sender.sendMessage("Es ist ein Fehler aufgetreten!");
+			sender.sendMessage(defaultError);
 			e.printStackTrace();
 		}
 		
