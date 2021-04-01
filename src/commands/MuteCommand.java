@@ -47,6 +47,8 @@ public class MuteCommand implements CommandExecutor{
 				} catch (NullPointerException e) {
 					OfflinePlayer muted = Bukkit.getOfflinePlayer(args[0]);
 					muteOfflinePlayer(sender, args, false, muted);
+				} catch (Exception e) {
+					sender.sendMessage(ChatColor.DARK_RED + "If you see this a critical error occurred!");
 				}
 				
 			}
@@ -110,29 +112,41 @@ public class MuteCommand implements CommandExecutor{
 			
 			
 			//calculate mute time in hours
-			long muteTime = Integer.parseInt(args[1]);
+			//make sure that an Integer is used
+			try {
+				long muteTime = Integer.parseInt(args[1]);
+				
+				long mT = muteTime * 1000 * 60 * 60;
+				
+				mutedList.set(muted.getUniqueId().toString(), "1");
+				mutedList.set(muted.getUniqueId().toString() + ".muteTime", (System.currentTimeMillis() + mT));
+				
+				try {
+					mutedList.save(file);
+				} catch (IOException e) {
+					sender.sendMessage(defaultError);
+					e.printStackTrace();
+					return;
+				}
+				
+				sender.sendMessage(ChatColor.GREEN + muted.getDisplayName() + onSuccess);
+				
+			} catch (Exception e) {
+				sender.sendMessage(config.getString("Error.NoIntEntered"));
+			}
 
 			
-			long mT = muteTime * 1000 * 60 * 60;
-			
-			mutedList.set(muted.getUniqueId().toString(), "1");
-			mutedList.set(muted.getUniqueId().toString() + ".muteTime", (System.currentTimeMillis() + mT));
+
 			
 		}
-		try {
-			mutedList.save(file);
-		} catch (IOException e) {
-			sender.sendMessage(defaultError);
-			e.printStackTrace();
-		}
-		
-		sender.sendMessage(ChatColor.GREEN + muted.getDisplayName() + onSuccess);
+
 
 	}
 	
 	public static void muteOfflinePlayer(CommandSender sender, String[] args, Boolean unlimit, OfflinePlayer muted) {
 		
 		FileConfiguration mutedList = new YamlConfiguration();
+		FileConfiguration config = Main.getPlugin().getConfig();
 		File file = new File("plugins/ChatMute/mutes/muteList.yml");
 		
 		if (unlimit == true) {
@@ -173,23 +187,29 @@ public class MuteCommand implements CommandExecutor{
 			
 			
 
-			long muteTime = Integer.parseInt(args[1]);
+			try {
+				long muteTime = Integer.parseInt(args[1]);
+				
+				long mT = muteTime * 1000 * 60 * 60;
+				
+				mutedList.set(muted.getUniqueId().toString(), "1");
+				mutedList.set(muted.getUniqueId().toString() + ".muteTime", (System.currentTimeMillis() + mT));
+				
+				try {
+					mutedList.save(file);
+					sender.sendMessage(ChatColor.GREEN + muted.getName() + onSuccess);
+				} catch (IOException e) {
+					sender.sendMessage(defaultError);
+					e.printStackTrace();
+				}
+				
+			} catch (Exception e) {
+				sender.sendMessage(config.getString("Error.NoIntEntered"));
+			}
+			
+		}
 
-			
-			long mT = muteTime * 1000 * 60 * 60;
-			
-			mutedList.set(muted.getUniqueId().toString(), "1");
-			mutedList.set(muted.getUniqueId().toString() + ".muteTime", (System.currentTimeMillis() + mT));
-			
-		}
-		try {
-			mutedList.save(file);
-		} catch (IOException e) {
-			sender.sendMessage(defaultError);
-			e.printStackTrace();
-		}
 		
-		sender.sendMessage(ChatColor.GREEN + muted.getName() + onSuccess);
 
 	}
 	
