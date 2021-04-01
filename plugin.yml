@@ -8,3 +8,7 @@ commands:
    mute:
       description: Mutes a player
       usage: /mute <time in hours>
+      
+   rlmuteconfig:
+      description: Reloads the config file
+      usage: /rlmuteconfig </>
