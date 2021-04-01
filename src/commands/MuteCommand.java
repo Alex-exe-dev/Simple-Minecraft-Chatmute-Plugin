@@ -20,6 +20,7 @@ import main.Main;
 public class MuteCommand implements CommandExecutor{
 	
 	public static String defaultError = "Es ist ein Fehler aufgetreten!";
+	public static String onSuccess = " wurde erfolgreich gemutet";
 
 	@SuppressWarnings("deprecation")
 	@Override
@@ -65,6 +66,7 @@ public class MuteCommand implements CommandExecutor{
 		
 		try {
 			defaultError = config.getString("Default.ErrorMessage");
+			onSuccess = config.getString("Default.OnSuccessMsg");
 			
 		} catch (Exception e) {
 			
@@ -124,7 +126,7 @@ public class MuteCommand implements CommandExecutor{
 			e.printStackTrace();
 		}
 		
-		sender.sendMessage(ChatColor.GREEN + muted.getDisplayName() + " wurde erfolgreich gemuted!");
+		sender.sendMessage(ChatColor.GREEN + muted.getDisplayName() + onSuccess);
 
 	}
 	
@@ -159,13 +161,13 @@ public class MuteCommand implements CommandExecutor{
 			try {
 				mutedList.load(file);
 			} catch (FileNotFoundException e) {
-				sender.sendMessage("Es ist ein Fehler aufgetreten!");
+				sender.sendMessage(defaultError);
 				e.printStackTrace();
 			} catch (IOException e) {
-				sender.sendMessage("Es ist ein Fehler aufgetreten!");
+				sender.sendMessage(defaultError);
 				e.printStackTrace();
 			} catch (InvalidConfigurationException e) {
-				sender.sendMessage("Es ist ein Fehler aufgetreten!");
+				sender.sendMessage(defaultError);
 				e.printStackTrace();
 			}
 			
@@ -183,11 +185,11 @@ public class MuteCommand implements CommandExecutor{
 		try {
 			mutedList.save(file);
 		} catch (IOException e) {
-			sender.sendMessage("Es ist ein Fehler aufgetreten!");
+			sender.sendMessage(defaultError);
 			e.printStackTrace();
 		}
 		
-		sender.sendMessage(ChatColor.GREEN + muted.getName() + " wurde erfolgreich gemuted!");
+		sender.sendMessage(ChatColor.GREEN + muted.getName() + onSuccess);
 
 	}
 	
